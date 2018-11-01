@@ -11,7 +11,8 @@ import {
   Login, 
   Dashboard, 
   QrScan, 
-  Register
+  Register,
+  TopUp
 } from "./container" 
 
 class App extends Component {
@@ -26,6 +27,7 @@ class App extends Component {
           <Route path="/register" component={Register} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/scan" component={QrScan} />
+          <Route path="/topup" component={TopUp} />
           <Route path="/" exact={true} component={Home} />
         </React.Fragment>
       </Router>
