@@ -17,6 +17,7 @@ const styles = theme => ({
 })
 
 const loginLink = props => <Link to="/login" {...props} />
+const registerLink = props => <Link to="/register" {...props} />
 
 class Home extends Component {
   render() {
@@ -38,7 +39,7 @@ class Home extends Component {
           </Grid>
 
           <Grid item xs={6}>
-            <Button variant="contained" color="primary" fullWidth>
+            <Button component={registerLink} variant="contained" color="primary" fullWidth>
               Register
             </Button>
           </Grid>

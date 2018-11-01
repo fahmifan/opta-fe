@@ -8,9 +8,7 @@ import Button from '@material-ui/core/Button'
 
 const styles = createStyles({
   root: {
-    justify: "center",
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
+    justify: "center"
   },
   container: {
     display: 'flex',
@@ -24,35 +22,28 @@ const styles = createStyles({
   },
 });
   
-class Login extends Component {
+class Register extends Component {
   state = {
+    name: "",
     email: "",
     password: "",
   }
 
-  _inputEmailHandler = e => {
-    this.setState({email: e.target.value})
+  _inputHandler = (e, key) => {
+    this.setState({[key]: e.target.value})
+    console.log("key: " + key, "val: " + e.target.value)
   }
 
-  _inputPasswordHandler = e => {
-    this.setState({password: e.target.value})
-  }
-
-  _submitLoginHandler = (e) => {
-    const {email, password} = this.state
+  _submitregisterHandler = (e) => {
+    const {name, email, password} = this.state
     
-    if(email === "" && password === "") {
-      alert("email or password cannot be empty"); 
+    if(name === "" && email === "" && password === "") {
+      alert("name, email or password cannot be empty"); 
       return;
     }
 
-    if(email !== "opta@email.com" && password !== "opta") {
-      alert("Login Failed"); 
-      return;
-    }
-  
-    alert("Login Successfull"); 
-    this.props.history.push('/dashboard');
+    alert("register Successfull"); 
+    this.props.history.push('/login');
   }
 
   render() {
@@ -64,8 +55,19 @@ class Login extends Component {
           justify="center"
           direction="column">
           <Grid item xs={12}>
-            <form className={classes.container} noValidate autoComplete="off">
-              <TextField onChange={(e) => this._inputEmailHandler(e)}
+            <form className={classes.container} noValidate autoComplete="on">
+              <TextField onChange={(e) => this._inputHandler(e, "name")}
+                id="outlined-name"
+                label="Name"
+                name="name"
+                className={classes.textField}
+                value={this.state.name}
+                margin="normal"
+                variant="outlined"
+                fullWidth
+              />
+
+              <TextField onChange={(e) => this._inputHandler(e, "email")}
                 id="outlined-email-input"
                 label="Email"
                 className={classes.textField}
@@ -77,7 +79,7 @@ class Login extends Component {
                 fullWidth
                 />
 
-              <TextField onChange={(e) => this._inputPasswordHandler(e)}
+              <TextField onChange={(e) => this._inputHandler(e, "password")}
                 id="outlined-password-input"
                 label="Password"
                 className={classes.textField}
@@ -89,18 +91,17 @@ class Login extends Component {
                 fullWidth
                 />
 
-              <Button onClick={(e) => this._submitLoginHandler(e)}
+              <Button onClick={(e) => this._submitregisterHandler(e)}
                 variant="contained" color="primary" fullWidth>
-                Login
+                register
               </Button>
             </form>
           </Grid>
         </Grid>
 
-        <Typography>email: opta@email.com; password: opta</Typography>
       </main>
     ); 
   }
 }
 
-export default withRouter(withStyles(styles)(Login));
+export default withRouter(withStyles(styles)(Register));

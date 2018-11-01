@@ -2,10 +2,8 @@ import React, { Component } from "react"
 
 import { Link } from "react-router-dom"
 
-import {QrReader} from "react-qr-reader"
-
 import { withStyles } from '@material-ui/core/styles';
-import { Grid, TextField, Typography } from "@material-ui/core"
+import { Typography } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
 
 const scanLink = props => <Link to="/scan" {...props} />
