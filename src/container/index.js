@@ -4,6 +4,7 @@ import Dashboard from "./Dashboard"
 import QrScan from "./QrScan"
 import Register from "./Register"
 import TopUp from "./TopUp"
+import BusRoutes from "./BusRoutes"
 
 export { 
     Home, 
@@ -12,4 +13,5 @@ export {
     QrScan,
     Register,
     TopUp,
+    BusRoutes,
 };

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -12,7 +12,8 @@ import {
   Dashboard, 
   QrScan, 
   Register,
-  TopUp
+  TopUp,
+  BusRoutes,
 } from "./container" 
 
 class App extends Component {
@@ -28,6 +29,7 @@ class App extends Component {
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/scan" component={QrScan} />
           <Route path="/topup" component={TopUp} />
+          <Route path="/bus_routes" component={BusRoutes} />
           <Route path="/" exact={true} component={Home} />
         </React.Fragment>
       </Router>

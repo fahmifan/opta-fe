@@ -36,15 +36,21 @@ class QrScan extends Component {
   }
   
   _pay = (busCode) => {
-    fetch(`/api/pay/${busCode}`, {method: "POST"})
-    .then(req => req.json())
-    .then(res => {
-      console.log("res", res)
-      this.setState({price: res.price})
+    fetch(`/api/pay`, {
+      method: "POST",
+      body: {
+        "user_id": 1,
+        "bus_id": busCode,
+      }
     })
-    .catch(err => {
-      console.log("err", err)
-    })
+      .then(req => req.json())
+      .then(res => {
+        console.log("res", res)
+        this.setState({price: res.price})
+      })
+      .catch(err => {
+        console.log("err", err)
+      })
 
     console.log("busCode", busCode)
   }
