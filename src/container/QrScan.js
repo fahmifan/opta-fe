@@ -6,7 +6,8 @@ class QrScan extends Component {
     super(props)
     this.state = {
       delay: 300,
-      result: 'No result',
+      result: null,
+      price: 0,
     }
     this.handleScan = this.handleScan.bind(this)
   }
@@ -17,6 +18,12 @@ class QrScan extends Component {
    * @param {string} data 
    */
   handleScan(data){
+    console.log("data", data)
+
+    if(data !== null) {
+      this._pay(data)
+    }
+
     if(data){
       this.setState({
         result: data,
@@ -28,7 +35,31 @@ class QrScan extends Component {
     console.error(err)
   }
   
+  _pay = (busCode) => {
+    fetch(`/api/pay/${busCode}`, {method: "POST"})
+    .then(req => req.json())
+    .then(res => {
+      console.log("res", res)
+      this.setState({price: res.price})
+    })
+    .catch(err => {
+      console.log("err", err)
+    })
+
+    console.log("busCode", busCode)
+  }
+
   render(){
+    const {price} = this.state
+
+    if(price !== 0) {
+      return (
+        <div>
+          <h1>price: {price}</h1>
+        </div>
+      )
+    }
+
     return(
       <div>
         <QrReader
