@@ -4,6 +4,8 @@ import { connect } from "react-redux"
 
 import { Redirect } from "react-router-dom"
 
+import { authCheckState } from "../auth/action"
+
 import { withStyles } from '@material-ui/core/styles';
 import { 
   Typography,
@@ -40,6 +42,7 @@ class BusRoutes extends Component {
   }
 
   componentDidMount() {
+    this.props.authCheckState()
     this.props.token && this._getBusRoutes(this.props.token)
   }
 
@@ -108,4 +111,8 @@ const mapStateToProps = state => ({
   isLoading: state.isLoading
 })
 
-export default connect(mapStateToProps)(withStyles(styles)(BusRoutes))
+const mapDispatchToProps = dispatch => ({
+  authCheckState: () => dispatch(authCheckState())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(BusRoutes))

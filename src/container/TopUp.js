@@ -36,7 +36,7 @@ class TopUp extends Component {
     console.log("key: " + key, "val: " + value)
   }
 
-  _submitTopUpHandler = (e) => {
+  _submitTopUpHandler = () => {
     const {nominal} = this.state
 
     console.log("nominal", nominal)
@@ -79,7 +79,7 @@ class TopUp extends Component {
               Rp
               </TextField>
 
-              <Button onClick={(e) => this._submitTopUpHandler(e)}
+              <Button onClick={() => this._submitTopUpHandler()}
                 variant="contained" color="primary" fullWidth>
                 TopUp!
               </Button>

@@ -1,10 +1,14 @@
 import React, { Component } from "react"
 
+import { connect } from "react-redux"
+
 import { withRouter } from "react-router-dom"
 
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, TextField, Typography, createStyles } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
+
+import { authCheckState } from "../auth/action";
 
 const styles = createStyles({
   root: {
@@ -27,6 +31,10 @@ class Register extends Component {
     name: "",
     email: "",
     password: "",
+  }
+
+  componentDidMount() {
+    this.props.authCheckState()
   }
 
   _inputHandler = (e, key) => {
@@ -104,4 +112,8 @@ class Register extends Component {
   }
 }
 
-export default withRouter(withStyles(styles)(Register));
+const mapDispatchToProps = dispatch => ({
+  authCheckState: () => dispatch(authCheckState())
+})
+
+export default connect(null, mapDispatchToProps)(withRouter(withStyles(styles)(Register)))

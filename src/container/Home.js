@@ -4,6 +4,8 @@ import { Link, Redirect } from "react-router-dom"
 
 import { connect } from "react-redux"
 
+import { authCheckState } from "../auth/action"
+
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
@@ -22,7 +24,9 @@ const loginLink = props => <Link to="/login" {...props} />
 const registerLink = props => <Link to="/register" {...props} />
 
 // class Home extends Component {
-const Home =({classes, isAuth, isLoading}) => {
+const Home =({classes, isAuth, isLoading, authCheckState}) => {
+  authCheckState()
+  
   if(!isLoading && isAuth) {
     return <Redirect to="/dashboard" />
   }
@@ -59,4 +63,8 @@ const mapStateToProps = state => ({
   isLoading: state.isLoading,
 })
 
-export default connect(mapStateToProps)(withStyles(styles)(Home))
+const mapDispatchToProps = dispatch => ({
+  authCheckState: () => dispatch(authCheckState())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Home))

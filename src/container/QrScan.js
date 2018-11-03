@@ -4,6 +4,8 @@ import QrReader from 'react-qr-reader'
 import { connect } from "react-redux"
 import { Redirect } from "react-router-dom"
 
+import { authCheckState } from "../auth/action";
+
 class QrScan extends Component {
   state = {
       delay: 300,
@@ -95,4 +97,8 @@ const mapStateToProps = state => ({
   token: state.token
 })
 
-export default connect(mapStateToProps)(QrScan)
+const mapDispatchToProps = dispatch => ({
+  authCheckState: () => dispatch(authCheckState)
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(QrScan)

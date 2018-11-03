@@ -3,7 +3,7 @@ import React, { Component } from "react"
 import { withRouter, Redirect } from "react-router-dom"
 
 import { connect } from "react-redux"
-import actions from "../auth/action"
+import actions, { authCheckState } from "../auth/action"
 
 import { withStyles } from '@material-ui/core/styles';
 import { 
@@ -34,6 +34,10 @@ class Login extends Component {
   state = {
     email: "",
     password: "",
+  }
+
+  componentDidMount() {
+    this.props.authCheckState()
   }
 
   _inputHandler = (e, type) => {
@@ -140,7 +144,8 @@ const mapDispatchToProps = dispatch => {
   return {
     reqLogin: (email, password) => {
       dispatch(actions.reqLogin(email, password))
-    }
+    },
+    authCheckState: () => dispatch(authCheckState()),
   }
 }
 

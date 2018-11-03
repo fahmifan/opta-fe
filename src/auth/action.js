@@ -6,7 +6,7 @@ const REQ_LOGOUT = "REQ_LOGOUT"
 
 const TOKEN = "token"
 const EXPIRATION_DATE = "expirationDate"
-const USER_ID = "user_id"
+const USER_ID = "userID"
 
 export const actionType = {
   REQ_LOGIN,
@@ -57,7 +57,7 @@ const reqLogin = (email, password) =>  {
       return res.json()
     })
     .then(data => {
-      const expirationDate = new Date(new Date().getTime() + 1000 * 1000);
+      const expirationDate = new Date(new Date().getTime() + 30 * 1000);
 
       localStorage.setItem(TOKEN, data.token)
       localStorage.setItem(USER_ID, data.user_id)
