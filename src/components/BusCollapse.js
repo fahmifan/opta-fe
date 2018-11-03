@@ -27,7 +27,7 @@ class BussCollapse extends Component {
   }
 
   render() {
-    const {id, start_loc, end_loc, match} = this.props 
+    const {id, start_loc, end_loc, detail, match} = this.props 
     const {open} = this.state
 
     return (
@@ -35,19 +35,14 @@ class BussCollapse extends Component {
 
         <ListItem onClick={() => this._listItemHandler(id)} button>
           <ListItemText primary={`${start_loc} - ${end_loc}`} />
-          {!open ? <ExpandMore /> : <ExpandLess />}
+          {open ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
   
         <Route path={`${match.url}/${id}`}
           render={props => (
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem>
-                  <BusRoutesDetail id={id} 
-                    start_loc={start_loc} 
-                    end_loc={end_loc} />
-                </ListItem>
-              </List>
+
+              <BusRoutesDetail detail={detail} open={open} {...props} />
             </Collapse>
           )}
         />
@@ -56,25 +51,17 @@ class BussCollapse extends Component {
   }
 }
 
-const BusRoutesDetail = ({id, start_loc, end_loc}) => (
-  <div>
-    <table>
-      <tbody>
-        <tr>
-          <td><Typography>No</Typography></td>
-          <td><Typography>{id}</Typography></td>
-        </tr>
-        <tr>
-          <td><Typography>Awal</Typography></td>
-          <td><Typography>{start_loc}</Typography></td>
-        </tr>
-        <tr>
-          <td><Typography>Akhir</Typography></td>
-          <td><Typography>{end_loc}</Typography></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+const BusRoutesDetail = ({detail, open}) => (
+  <List component="div" disablePadding>
+    {
+      detail && detail.map((d, i) => (
+        <ListItem key={d.id}>
+          <Typography>{d.queue}. &nbsp;</Typography>
+          <Typography>{d.location_name}</Typography>
+        </ListItem>        
+      ))
+    }
+  </List>
 )
 
 export default withRouter(BussCollapse)

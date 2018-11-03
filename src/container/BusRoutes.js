@@ -40,7 +40,6 @@ const styles = createStyles({
 class BusRoutes extends Component {
   state = {
     isLoad: false,
-    open: false,
     routes: [],
   }
 
@@ -90,11 +89,12 @@ class BusRoutes extends Component {
             routes.length > 0 && 
             routes.map(route => {
               return (
-                <React.Fragment>
+                <React.Fragment key={route.id}>
                   <BusCollapse 
                     id={route.id}
                     start_loc={route.start_loc}
                     end_loc={route.end_loc}
+                    detail={route.detail}
                   />
                   <Divider />  
                 </React.Fragment>
