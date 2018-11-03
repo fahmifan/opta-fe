@@ -21,7 +21,7 @@ class BussCollapse extends Component {
   _listItemHandler = (busId) => {
     this.setState({open: !this.state.open})
     const currentURL = this.props.match.url
-    this.props.history.push(`${currentURL}/${busId}`);
+    this.props.history.replace(`${currentURL}/${busId}`);
   }
 
   render() {
