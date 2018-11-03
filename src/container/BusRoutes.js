@@ -1,7 +1,23 @@
 import React, { Component } from "react"
 
+import { withRouter, Route } from "react-router-dom"
+
 import { withStyles } from '@material-ui/core/styles';
-import { Typography, createStyles } from "@material-ui/core"
+import { 
+  Typography,
+  List,
+  ListItem, 
+  ListItemText,
+  Collapse,
+  Divider,
+  createStyles 
+} from "@material-ui/core"
+
+import NavigateNext from "@material-ui/icons/NavigateNext"
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+
+import {BusCollapse} from "../components"
 
 const styles = createStyles({
   root: {
@@ -24,6 +40,7 @@ const styles = createStyles({
 class BusRoutes extends Component {
   state = {
     isLoad: false,
+    open: false,
     routes: [],
   }
 
@@ -51,29 +68,43 @@ class BusRoutes extends Component {
     })
   } 
 
+  _listItemHandler = (busId) => {
+    this.setState({open: !this.state.open})
+    const currentURL = this.props.match.url
+    this.props.history.push(`${currentURL}/${busId}`);
+  }
 
   render() {
-    const { classes } = this.props
-    const { isLoad, routes } = this.state
-
-    let busRoutes = "Loading..."
-
-    if(routes.length > 0) {
-      busRoutes = routes.map(route => (
-        <li key={route.bus_id}>{route.start_loc} -- {route.end_loc}</li>
-      ))
-    }
+    const { classes, match } = this.props
+    const { isLoad, routes, open } = this.state
 
     return(
       <main className={classes.root}>
-        <Typography variant="h4">Rute Bus</Typography>
-        <br/> <br/>
+        <Typography variant="h5">Rute Bus</Typography>
+        <br/>
+        
+        {isLoad && "Loading..."}
 
-        {busRoutes}
-
+        <List component="nav">
+          { 
+            routes.length > 0 && 
+            routes.map(route => {
+              return (
+                <React.Fragment>
+                  <BusCollapse 
+                    id={route.id}
+                    start_loc={route.start_loc}
+                    end_loc={route.end_loc}
+                  />
+                  <Divider />  
+                </React.Fragment>
+              )
+            }) 
+          }
+        </List>
       </main>
     );
   }
 }
 
-export default withStyles(styles)(BusRoutes)
+export default withRouter(withStyles(styles)(BusRoutes))
