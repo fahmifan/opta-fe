@@ -1,33 +1,25 @@
 import React, { Component } from "react"
 
-import { withRouter, Route } from "react-router-dom"
-
 import { withStyles } from '@material-ui/core/styles';
 import { 
   Typography,
   List,
-  ListItem, 
-  ListItemText,
-  Collapse,
+  CircularProgress,
   Divider,
   createStyles 
 } from "@material-ui/core"
-
-import NavigateNext from "@material-ui/icons/NavigateNext"
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 
 import {BusCollapse} from "../components"
 
 const styles = createStyles({
   root: {
-    justify: "center",
     paddingLeft: "1rem",
     paddingRight: "1rem",
   },
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+  progress: {
+    marginTop: "2rem",
+    margin: "auto",
+    display: "block",  
   },
   dense: {
     marginTop: 16,
@@ -67,39 +59,29 @@ class BusRoutes extends Component {
     })
   } 
 
-  _listItemHandler = (busId) => {
-    this.setState({open: !this.state.open})
-    const currentURL = this.props.match.url
-    this.props.history.push(`${currentURL}/${busId}`);
-  }
-
   render() {
-    const { classes, match } = this.props
-    const { isLoad, routes, open } = this.state
+    const { classes } = this.props
+    const { isLoad, routes } = this.state
 
     return(
       <main className={classes.root}>
         <Typography variant="h5">Rute Bus</Typography>
-        <br/>
-        
-        {isLoad && "Loading..."}
+      
+        {isLoad && <CircularProgress className={classes.progress} />}
 
         <List component="nav">
           { 
-            routes.length > 0 && 
-            routes.map(route => {
-              return (
-                <React.Fragment key={route.id}>
-                  <BusCollapse 
-                    id={route.id}
-                    start_loc={route.start_loc}
-                    end_loc={route.end_loc}
-                    detail={route.detail}
-                  />
-                  <Divider />  
-                </React.Fragment>
-              )
-            }) 
+            routes.length > 0 && routes.map(route => (
+              <React.Fragment key={route.id}>
+                <BusCollapse 
+                  id={route.id}
+                  start_loc={route.start_loc}
+                  end_loc={route.end_loc}
+                  detail={route.detail}
+                />
+                <Divider />  
+              </React.Fragment>
+            )) 
           }
         </List>
       </main>
@@ -107,4 +89,4 @@ class BusRoutes extends Component {
   }
 }
 
-export default withRouter(withStyles(styles)(BusRoutes))
+export default withStyles(styles)(BusRoutes)
