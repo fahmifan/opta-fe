@@ -10,8 +10,10 @@ import { Provider } from "react-redux"
 
 import reducer from "./auth/reducer"
 
-const composeEnhancers =  process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose; 
-
+let composeEnhancers =  process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : compose; 
+if(!composeEnhancers){
+  composeEnhancers = compose
+}
 const store = createStore(
   reducer,
   composeEnhancers(applyMiddleware(thunk))

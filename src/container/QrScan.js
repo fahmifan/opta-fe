@@ -1,23 +1,22 @@
 import React, { Component } from 'react'
 import QrReader from 'react-qr-reader'
  
+import { connect } from "react-redux"
+import { Redirect } from "react-router-dom"
+
 class QrScan extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
+  state = {
       delay: 300,
       result: null,
       price: 0,
     }
-    this.handleScan = this.handleScan.bind(this)
-  }
 
   /**
    * handleScan invokes when app is scanning
    * & it updates `state.result` using the resulted data. 
    * @param {string} data 
    */
-  handleScan(data){
+  _handleScan = (data) => {
     console.log("data", data)
 
     if(data !== null) {
@@ -31,17 +30,21 @@ class QrScan extends Component {
     }
   }
   
-  handleError(err){
+  _handleError = (err) => {
     console.error(err)
   }
   
   _pay = (busCode) => {
     fetch(`/api/pay`, {
       method: "POST",
-      body: {
+      headers: {
+        "Content-Type": "application/json",
+        "token": this.props.token,
+      },
+      body: JSON.stringify({
         "user_id": 1,
         "bus_id": busCode,
-      }
+      })
     })
       .then(req => req.json())
       .then(res => {
@@ -57,6 +60,12 @@ class QrScan extends Component {
 
   render(){
     const {price} = this.state
+    const {isAuth, isLoading} = this.props
+
+    if(!isLoading && !isAuth) {
+      return <Redirect to="/login" />
+    }
+
 
     if(price !== 0) {
       return (
@@ -70,8 +79,8 @@ class QrScan extends Component {
       <div>
         <QrReader
           delay={this.state.delay}
-          onError={this.handleError}
-          onScan={this.handleScan}
+          onError={(err) => this._handleError(err)}
+          onScan={(data) => this._handleScan(data)}
           style={{ width: '100%' }}
           />
         <p>{this.state.result}</p>
@@ -80,4 +89,10 @@ class QrScan extends Component {
   }
 }
 
-export default QrScan;
+const mapStateToProps = state => ({
+  isAuth: state.isAuth,
+  isLoading: state.isLoading,
+  token: state.token
+})
+
+export default connect(mapStateToProps)(QrScan)

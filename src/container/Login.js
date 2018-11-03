@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-import { withRouter } from "react-router-dom"
+import { withRouter, Redirect } from "react-router-dom"
 
 import { connect } from "react-redux"
 import actions from "../auth/action"
@@ -12,6 +12,7 @@ import {
   Typography, 
   createStyles, 
   CircularProgress, 
+  Snackbar,
 } from "@material-ui/core"
 
 import Button from '@material-ui/core/Button'
@@ -61,7 +62,11 @@ class Login extends Component {
   }
 
   render() {
-    const { classes, isLoading } = this.props
+    const { classes, isLoading, isAuth } = this.props
+
+    if(isAuth) {
+      return <Redirect to="/dashboard" />
+    }
 
     if(isLoading) {
       return <CircularProgress className={classes.progress} />
@@ -105,6 +110,19 @@ class Login extends Component {
         </Grid>
 
         <Typography>email: opta@email.com; password: opta</Typography>
+
+        <Snackbar 
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          open={true}
+          autoHideDuration={6000}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Login first</span>}
+        />
       </main>
     ); 
   }
@@ -112,10 +130,9 @@ class Login extends Component {
 
 const mapStateToProps = state => {
   return {
-    token: state.token,
-    userID: state.userID,
     error: state.error,
     isLoading: state.isLoading,
+    isAuth: state.auth,
   }
 }
 

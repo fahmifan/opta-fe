@@ -42,6 +42,11 @@ export default function reducer(state = initState, action) {
         error: null,
       }
 
+    case actionType.REQ_LOGOUT: 
+      return {
+        ...state,
+        ...initState,  
+      }
     default: return state
   }
 }

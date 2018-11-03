@@ -1,5 +1,9 @@
 import React, { Component } from "react"
 
+import { connect } from "react-redux"
+
+import { Redirect } from "react-router-dom"
+
 import { withStyles } from '@material-ui/core/styles';
 import { 
   Typography,
@@ -36,15 +40,19 @@ class BusRoutes extends Component {
   }
 
   componentDidMount() {
-    this._getBusRoutes()
+    this.props.token && this._getBusRoutes(this.props.token)
   }
 
-  _getBusRoutes = () => {
+  _getBusRoutes = (token) => {
     // start loading
     this.setState({isLoad: true})
 
     fetch("/api/routes", {
       method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "token": token,
+      }
     })
     .then(req => req.json())
     .then(res => {
@@ -60,8 +68,12 @@ class BusRoutes extends Component {
   } 
 
   render() {
-    const { classes } = this.props
+    const { classes, isAuth, isLoading } = this.props
     const { isLoad, routes } = this.state
+
+    if(!isLoading && !isAuth) {
+      return <Redirect to="/login" />
+    }
 
     return(
       <main className={classes.root}>
@@ -89,4 +101,11 @@ class BusRoutes extends Component {
   }
 }
 
-export default withStyles(styles)(BusRoutes)
+const mapStateToProps = state => ({
+  token: state.token,
+  isAuth: state.isAuth,
+  userID: state.userID,
+  isLoading: state.isLoading
+})
+
+export default connect(mapStateToProps)(withStyles(styles)(BusRoutes))

@@ -1,6 +1,9 @@
 import React, { Component } from "react"
 
-import { Link } from "react-router-dom"
+import { connect } from "react-redux"
+import { Link, Redirect } from "react-router-dom"
+
+import actions from "../auth/action"
 
 import { withStyles } from '@material-ui/core/styles';
 import { Typography, createStyles } from "@material-ui/core"
@@ -26,27 +29,36 @@ const styles = createStyles({
 
 const scanLink = props => <Link to="/scan" {...props} />
 const topupLink = props => <Link to="/topup" {...props} />
+const busRouteLink = props => <Link to="bus_routes" {...props} />
 
-class Dashboard extends Component {
-  render() {
-    const { classes } = this.props
+const Dashboard = ({classes}) => {
+  return (
+    <main className={classes.root}>
+      <Typography variant="h4">Dashboard</Typography>
 
-    return(
-      <main className={classes.root}>
-        <Typography variant="h4">Dashboard</Typography>
+      <br/> <br/>
+      <Button component={scanLink} variant="contained" color="primary" fullWidth={true}>
+        Scan!
+      </Button> 
+      
+      <br/> <br/>
+      <Button component={topupLink} variant="contained" color="primary" fullWidth={true}>
+        Top Up!
+      </Button>
 
-        <br/> <br/>
-        <Button component={scanLink} variant="contained" color="primary" fullWidth={true}>
-          Scan!
-        </Button> 
-        
-        <br/> <br/>
-        <Button component={topupLink} variant="contained" color="primary" fullWidth={true}>
-          Top Up!
-        </Button>
-      </main>
-    );
+      <br/> <br/>
+      <Button component={busRouteLink} variant="contained" color="primary" fullWidth={true}>
+        Rute Bus
+      </Button>
+    </main>
+  )
+}
+
+const mapStateToProps = state => {
+  return {
+    isAuth: state.isAuth,
+    isLoading: state.isLoading,
   }
 }
 
-export default withStyles(styles)(Dashboard)
+export default connect(mapStateToProps)(withStyles(styles)(Dashboard))

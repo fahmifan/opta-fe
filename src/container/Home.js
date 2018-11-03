@@ -1,6 +1,8 @@
-import React, { Component } from "react"
+import React from "react"
 
-import { Link } from "react-router-dom"
+import { Link, Redirect } from "react-router-dom"
+
+import { connect } from "react-redux"
 
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from "@material-ui/core"
@@ -19,35 +21,42 @@ const styles = theme => ({
 const loginLink = props => <Link to="/login" {...props} />
 const registerLink = props => <Link to="/register" {...props} />
 
-class Home extends Component {
-  render() {
-    const {classes} = this.props
-  
-    return(
-      <main className={classes.root}>
-        <Typography variant="h4" gutterBottom>
-          OPTA
-        </Typography>
-
-        <Grid container 
-          spacing={16}>
-          
-          <Grid item xs={6}>
-            <Button component={loginLink} variant="contained" color="primary" fullWidth={true}>
-              Login
-            </Button>
-          </Grid>
-
-          <Grid item xs={6}>
-            <Button component={registerLink} variant="contained" color="primary" fullWidth>
-              Register
-            </Button>
-          </Grid>
-
-        </Grid>
-      </main>
-    )
+// class Home extends Component {
+const Home =({classes, isAuth, isLoading}) => {
+  if(!isLoading && isAuth) {
+    return <Redirect to="/dashboard" />
   }
+
+  return(
+    <main className={classes.root}>
+      <Typography variant="h4" gutterBottom>
+        OPTA
+      </Typography>
+
+      <Grid container 
+        spacing={16}>
+        
+        <Grid item xs={6}>
+          <Button component={loginLink} variant="contained" color="primary" fullWidth={true}>
+            Login
+          </Button>
+        </Grid>
+
+        <Grid item xs={6}>
+          <Button component={registerLink} variant="contained" color="primary" fullWidth>
+            Register
+          </Button>
+        </Grid>
+
+      </Grid>
+    </main>
+  )
+
 }
 
-export default withStyles(styles)(Home);
+const mapStateToProps = state => ({
+  isAuth: state.isAuth,
+  isLoading: state.isLoading,
+})
+
+export default connect(mapStateToProps)(withStyles(styles)(Home))
