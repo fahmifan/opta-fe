@@ -22,6 +22,7 @@ class App extends Component {
       <Router>
         <React.Fragment>
           <CssBaseline />
+
           <MenuAppBar appName="OPTA" /> <br />
           <Route path="/home" component={Home} />
           <Route path="/login" component={Login} />
