@@ -2,6 +2,8 @@ import React, { Component } from "react"
 
 import { withRouter } from "react-router-dom"
 
+import { connect } from "react-redux"
+
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, TextField, Typography, createStyles } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
@@ -27,6 +29,8 @@ const styles = createStyles({
 class TopUp extends Component {
   state = {
     nominal: 0,
+    error: null,
+    isSuccess: false,
   }
 
   _inputHandler = (e, key) => {
@@ -37,7 +41,8 @@ class TopUp extends Component {
   }
 
   _submitTopUpHandler = () => {
-    const {nominal} = this.state
+    const { nominal } = this.state
+    const { token, userID } = this.props
 
     console.log("nominal", nominal)
     if(!Number.isInteger(nominal)) {
@@ -50,7 +55,41 @@ class TopUp extends Component {
       return
     }
 
-    alert("TopUp Successfull");
+    const payload = {
+      "nominal": nominal,
+      "user_id": userID,
+    }
+
+    fetch("/api/topup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "token": token
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(res => {
+      if(!res.ok) {
+        this.setState({error: res.error, isSuccess: false})
+        throw new Error(res.error)
+      }
+
+      this.setState({error: null, isSuccess: true})
+      this._topupSuccess()
+    })
+    .then()
+    .then(error => {
+      console.log("error", error)
+      this.setState({error: error, isSuccess: false,
+      })
+    })
+  }
+
+  _topupSuccess = () => {
+    alert("Top Up Success")
+
+    // susspend this
+    this.props.history.push("/dashboard")
   }
 
   render() {
@@ -91,4 +130,9 @@ class TopUp extends Component {
   }
 }
 
-export default withRouter(withStyles(styles)(TopUp));
+const mapStateToProps = state => ({
+  token: state.token,
+  userID: state.userID
+})
+
+export default connect(mapStateToProps)(withRouter(withStyles(styles)(TopUp)))
