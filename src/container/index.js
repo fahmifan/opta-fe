@@ -1,17 +1,17 @@
 import Home from "./Home"
-import Login from "./Login"
+import UserLogin from "./UserLogin"
 import Dashboard from "./Dashboard"
 import QrScan from "./QrScan"
-import Register from "./Register"
+import UserRegister from "./UserRegister"
 import TopUp from "./TopUp"
 import BusRoutes from "./BusRoutes"
 
 export { 
     Home, 
-    Login, 
+    UserLogin, 
     Dashboard,
     QrScan,
-    Register,
+    UserRegister,
     TopUp,
     BusRoutes,
 };

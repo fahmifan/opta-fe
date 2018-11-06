@@ -12,7 +12,8 @@ import { authCheckState } from "../auth/action";
 
 const styles = createStyles({
   root: {
-    justify: "center"
+    justify: "center",
+    padding: "1rem"
   },
   container: {
     display: 'flex',
@@ -26,11 +27,13 @@ const styles = createStyles({
   },
 });
   
-class Register extends Component {
+class UserRegister extends Component {
   state = {
     name: "",
     email: "",
     password: "",
+    address: "",
+    error: null,
   }
 
   componentDidMount() {
@@ -43,15 +46,47 @@ class Register extends Component {
   }
 
   _submitregisterHandler = (e) => {
-    const {name, email, password} = this.state
-    
+    const {name, email, password, address} = this.state
+
+    // validate
     if(name === "" && email === "" && password === "") {
       alert("name, email or password cannot be empty"); 
       return;
     }
 
-    alert("register Successfull"); 
-    this.props.history.push('/login');
+    const userCreds = {
+      "name": name,
+      "email": email,
+      "password": password,
+      "address": address,
+    }
+
+    this._doRegist(userCreds)
+ 
+    // this.props.history.push('/login');
+  }
+
+  _doRegist(userCreds) {
+    console.log(JSON.stringify(userCreds))
+
+    fetch("/api/user/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(userCreds)
+    })
+    .then(res => {
+      if(!res.ok) throw new Error(res.statusText)
+      return res.json()
+    })
+    .then(data => {
+      this.props.history.push('/login');
+    })
+    .catch(err => {
+      console.log(err)
+      this.setState({error: err})
+    })
   }
 
   render() {
@@ -99,6 +134,18 @@ class Register extends Component {
                 fullWidth
                 />
 
+              <TextField onChange={(e) => this._inputHandler(e, "address")}
+                id="outlined-address-input"
+                label="Alamat"
+                className={classes.textField}
+                type="text"
+                name="alamat"
+                autoComplete="address"
+                margin="normal"
+                variant="outlined"
+                fullWidth
+                />
+
               <Button onClick={(e) => this._submitregisterHandler(e)}
                 variant="contained" color="primary" fullWidth>
                 register
@@ -116,4 +163,4 @@ const mapDispatchToProps = dispatch => ({
   authCheckState: () => dispatch(authCheckState())
 })
 
-export default connect(null, mapDispatchToProps)(withRouter(withStyles(styles)(Register)))
+export default connect(null, mapDispatchToProps)(withRouter(withStyles(styles)(UserRegister)))

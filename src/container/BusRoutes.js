@@ -50,7 +50,7 @@ class BusRoutes extends Component {
     // start loading
     this.setState({isLoad: true})
 
-    fetch("/api/routes", {
+    fetch("/api/route", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

@@ -12,10 +12,10 @@ import { MenuAppBar } from "./components"
 
 import {
   Home, 
-  Login, 
+  UserLogin, 
   Dashboard, 
   QrScan, 
-  Register,
+  UserRegister,
   TopUp,
   BusRoutes,
 } from "./container" 
@@ -32,7 +32,8 @@ class App extends Component {
       <>
       <CssBaseline />
       <MenuAppBar appName="OPTA" /> <br />
-      <Route path="/login" exact component={Login} />
+      <Route path="/login" exact component={UserLogin} />
+      <Route path="/register" exatc component={UserRegister} />
       <Route path="/home" exact component={Home} />
       <Route path="/" exact component={Home} />
       <Redirect to="/" />
@@ -50,7 +51,8 @@ class App extends Component {
           <Route path="/scan" component={QrScan} />
           <Route path="/topup" component={TopUp} />
           <Route path="/bus_routes" component={BusRoutes} />
-          <Route path="/login" exact component={Login} />
+          <Route path="/login" exact component={UserLogin} />
+          <Route path="/register" exatc component={UserRegister} />
           <Route path="/home" exact component={Home} />
           <Route path="/" exact component={Home} />
         </Switch>

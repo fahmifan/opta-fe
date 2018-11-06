@@ -30,7 +30,7 @@ const styles = createStyles({
   },
 });
   
-class Login extends Component {
+class UserLogin extends Component {
   state = {
     email: "",
     password: "",
@@ -152,4 +152,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withRouter(withStyles(styles)(Login)));
+)(withRouter(withStyles(styles)(UserLogin)));
