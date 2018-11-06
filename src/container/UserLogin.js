@@ -3,7 +3,7 @@ import React, { Component } from "react"
 import { withRouter, Redirect } from "react-router-dom"
 
 import { connect } from "react-redux"
-import actions, { authCheckState } from "../auth/action"
+import actions, { authCheckState } from "../store/auth/action"
 
 import { withStyles } from '@material-ui/core/styles';
 import { 

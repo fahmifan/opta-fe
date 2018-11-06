@@ -2,7 +2,7 @@ import React, { Component } from "react"
 
 import { connect } from "react-redux"
 
-import { withRouter } from "react-router-dom"
+import { withRouter, Redirect } from "react-router-dom"
 
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, TextField, Typography, createStyles } from "@material-ui/core"
@@ -90,7 +90,12 @@ class UserRegister extends Component {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, isLoading, isAuth } = this.props
+
+    if(!isLoading && !isAuth) {
+      return <Redirect to="/" />
+    }
+
     return(
       <main className={classes.root}>
         <Grid container 
@@ -156,6 +161,13 @@ class UserRegister extends Component {
 
       </main>
     ); 
+  }
+}
+
+const mapStateToProps = state => {
+  return {
+    isAuth: state.isAuth,
+    isLoading: state.isLoading,
   }
 }
 

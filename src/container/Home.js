@@ -4,7 +4,7 @@ import { Link, Redirect } from "react-router-dom"
 
 import { connect } from "react-redux"
 
-import { authCheckState } from "../auth/action"
+import { authCheckState } from "../store/auth/action"
 
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from "@material-ui/core"

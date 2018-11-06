@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from "react-router-d
 
 import { connect } from "react-redux"
 
-import { authCheckState } from "./auth/action";
+import { authCheckState } from "./store/auth/action";
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 

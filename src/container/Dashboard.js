@@ -3,7 +3,7 @@ import React, { Component } from "react"
 import { connect } from "react-redux"
 import { Link, Redirect } from "react-router-dom"
 
-import { authCheckState } from "../auth/action"
+import { authCheckState } from "../store/auth/action"
 
 import { withStyles } from '@material-ui/core/styles';
 import { Typography, createStyles } from "@material-ui/core"
@@ -31,9 +31,13 @@ const scanLink = props => <Link to="/scan" {...props} />
 const topupLink = props => <Link to="/topup" {...props} />
 const busRouteLink = props => <Link to="bus_routes" {...props} />
 
-const Dashboard = ({classes, authCheckState}) => {
+const Dashboard = ({classes, authCheckState, isAuth, isLoading}) => {
   authCheckState()
   
+  if(!isLoading && !isAuth) {
+    return <Redirect to="/" />
+  }
+
   return (
     <main className={classes.root}>
       <Typography variant="h4">Dashboard</Typography>

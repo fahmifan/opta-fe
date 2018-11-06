@@ -4,14 +4,22 @@ import QrReader from 'react-qr-reader'
 import { connect } from "react-redux"
 import { Redirect } from "react-router-dom"
 
-import { authCheckState } from "../auth/action";
+import { authCheckState } from "../store/auth/action";
 
 class QrScan extends Component {
   state = {
       delay: 300,
       result: null,
+      doScan: true,
       price: 0,
     }
+
+  componentDidUpdate() {
+    if(!this.state.doScan) {
+      this.setState({doScan: true})
+      this._pay(this.state.data)
+    }
+  }
 
   /**
    * handleScan invokes when app is scanning
@@ -21,15 +29,9 @@ class QrScan extends Component {
   _handleScan = (data) => {
     console.log("data", data)
 
-    if(data !== null) {
-      this._pay(data)
-    }
-
-    if(data){
-      this.setState({
-        result: data,
-      })
-    }
+    if(data && data !== null) {
+      this.setState({doScan: false, data: data})
+    }    
   }
   
   _handleError = (err) => {
@@ -37,7 +39,7 @@ class QrScan extends Component {
   }
   
   _pay = (busCode) => {
-    fetch(`/api/pay`, {
+    fetch(`/api/user/pay`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -45,7 +47,7 @@ class QrScan extends Component {
       },
       body: JSON.stringify({
         "user_id": 1,
-        "bus_id": busCode,
+        "bus_id": Number.parseInt(busCode, 10),
       })
     })
       .then(req => req.json())
