@@ -12,6 +12,7 @@ class QrScan extends Component {
       result: null,
       doScan: true,
       price: 0,
+      error: null,
     }
 
   componentDidUpdate() {
@@ -50,13 +51,21 @@ class QrScan extends Component {
         "bus_id": Number.parseInt(busCode, 10),
       })
     })
-      .then(req => req.json())
+      .then(req => {
+        if(!req.ok) {
+          this.setState({error: req.error}) 
+          throw new Error(req.error)
+        }
+
+        return req.json()
+      })
       .then(res => {
         console.log("res", res)
         this.setState({price: res.price})
       })
-      .catch(err => {
-        console.log("err", err)
+      .catch(error => {
+        this.setState({error: error})
+        console.log("error", error)
       })
 
     console.log("busCode", busCode)
