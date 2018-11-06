@@ -20,11 +20,11 @@ const reqLoginStart = () => ({
   type: REQ_LOGIN_START,
 })
 
-const reqLoginSuccess = ({token, user_id}) => ({
+const reqLoginSuccess = ({token, userID}) => ({
   type: REQ_LOGIN_SUCCESS,
   payload: {
     token: token,
-    userID: user_id,
+    userID: userID,
   }
 })
 
@@ -57,13 +57,18 @@ const reqLogin = (email, password) =>  {
       return res.json()
     })
     .then(data => {
-      const expirationDate = new Date(new Date().getTime() + 30 * 1000);
+      const expirationDate = new Date(new Date().getTime() + 500 * 1000);
 
       localStorage.setItem(TOKEN, data.token)
       localStorage.setItem(USER_ID, data.user_id)
       localStorage.setItem(EXPIRATION_DATE, expirationDate)
       
-      dispatch(reqLoginSuccess(data))
+      const payload = {
+        token: data.token,
+        userID: data.user_id
+      }
+
+      dispatch(reqLoginSuccess(payload))
     })
     .catch(error => {
       console.log(error)
