@@ -4,20 +4,22 @@ import QrReader from 'react-qr-reader'
 import { connect } from "react-redux"
 import { Redirect } from "react-router-dom"
 
+import { Typography } from "@material-ui/core"
+
 import { authCheckState } from "../store/auth/action";
 
 class QrScan extends Component {
   state = {
       delay: 300,
       result: null,
-      doScan: true,
+      doPay: true,
       price: 0,
       error: null,
     }
 
   componentDidUpdate() {
-    if(!this.state.doScan) {
-      this.setState({doScan: true})
+    if(this.state.doPay) {
+      this.setState({doPay: false})
       this._pay(this.state.data)
     }
   }
@@ -31,8 +33,8 @@ class QrScan extends Component {
     console.log("data", data)
 
     if(data && data !== null) {
-      this.setState({doScan: false, data: data})
-    }    
+      this.setState({doPay: true, data: data})
+    }
   }
   
   _handleError = (err) => {
@@ -51,34 +53,49 @@ class QrScan extends Component {
         "bus_id": Number.parseInt(busCode, 10),
       })
     })
-      .then(req => {
-        if(!req.ok) {
-          this.setState({error: req.error}) 
-          throw new Error(req.error)
-        }
+    .then(req => {
+      if(!req.ok) {
+        this.setState({error: req.error, doPay: false}) 
+        throw new Error(req.error)
+      }
 
-        return req.json()
-      })
-      .then(res => {
-        console.log("res", res)
-        this.setState({price: res.price})
-      })
-      .catch(error => {
-        this.setState({error: error})
-        console.log("error", error)
-      })
+      return req.json()
+    })
+    .then(res => {
+      console.log("res", res)
+      // check again
+      if(res.status_code !== 200) {
+        this.setState({error: res.error, doPay: false})
+        return
+      }
+
+      this.setState({price: res.price, doPay: true})
+    })
+    .catch(error => {
+      this.setState({error: error, doPay: false})
+      console.log("error", error)
+    })
 
     console.log("busCode", busCode)
   }
 
   render(){
-    const {price} = this.state
+    const {price, error} = this.state
     const {isAuth, isLoading} = this.props
 
     if(!isLoading && !isAuth) {
       return <Redirect to="/login" />
     }
 
+    if(error) {
+      return (
+        <main style={{margin: "auto"}}>
+          {alert(error)}
+
+          return <Redirect to="/dashboard" />
+        </main>
+      ) 
+    }
 
     if(price !== 0) {
       return (
