@@ -52,11 +52,6 @@ class UserLogin extends Component {
       alert("email or password cannot be empty"); 
       return;
     }
-
-    if(email !== "opta@email.com" && password !== "opta") {
-      alert("Login Failed"); 
-      return;
-    }
   
     reqLogin(email, password)
 
