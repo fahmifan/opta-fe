@@ -60,7 +60,7 @@ class TopUp extends Component {
       "user_id": userID,
     }
 
-    fetch("/api/topup", {
+    fetch("/api/user/topup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -75,10 +75,12 @@ class TopUp extends Component {
       }
 
       this.setState({error: null, isSuccess: true})
+      return res.json()
+    })
+    .then(res => {
       this._topupSuccess()
     })
-    .then()
-    .then(error => {
+    .catch(error => {
       console.log("error", error)
       this.setState({error: error, isSuccess: false,
       })
