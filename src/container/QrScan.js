@@ -2,27 +2,19 @@ import React, { Component } from 'react'
 import QrReader from 'react-qr-reader'
  
 import { connect } from "react-redux"
-import { Redirect } from "react-router-dom"
-
-import { Typography } from "@material-ui/core"
+import { Redirect, withRouter } from "react-router-dom"
 
 import { authCheckState } from "../store/auth/action";
 
 class QrScan extends Component {
   state = {
-      delay: 300,
+      delay: 200,
       result: null,
-      doPay: true,
+      doPay: false,
       price: 0,
       error: null,
+      isFetching: false,
     }
-
-  componentDidUpdate() {
-    if(this.state.doPay) {
-      this.setState({doPay: false})
-      this._pay(this.state.data)
-    }
-  }
 
   /**
    * handleScan invokes when app is scanning
@@ -34,6 +26,7 @@ class QrScan extends Component {
 
     if(data && data !== null) {
       this.setState({doPay: true, data: data})
+      this._pay()
     }
   }
   
@@ -41,7 +34,9 @@ class QrScan extends Component {
     console.error(err)
   }
   
-  _pay = (busCode) => {
+  _pay = () => {
+    this.setState({isFetching: true})
+
     fetch(`/api/user/pay`, {
       method: "POST",
       headers: {
@@ -50,7 +45,7 @@ class QrScan extends Component {
       },
       body: JSON.stringify({
         "user_id": 1,
-        "bus_id": Number.parseInt(busCode, 10),
+        "bus_id": Number.parseInt(this.state.data, 10),
       })
     })
     .then(req => {
@@ -58,43 +53,35 @@ class QrScan extends Component {
         this.setState({error: req.error, doPay: false}) 
         throw new Error(req.error)
       }
-
+      this.setState({error: null, doPay: false})
       return req.json()
     })
-    .then(res => {
-      console.log("res", res)
-      // check again
-      if(res.status_code !== 200) {
-        this.setState({error: res.error, doPay: false})
+    .then(data => {
+      // check if the payment is success
+      if(!data.status) {
+        this.setState({price: data.price, doPay: false, error: data.error, isFetching: false})
+        alert(data.error)
+
+        this.props.history.push("/")
+
         return
       }
 
-      this.setState({price: res.price, doPay: true})
+      // after paid don't request again
+      this.setState({price: data.price, doPay: false, error: null, isFetching: false})        
     })
     .catch(error => {
-      this.setState({error: error, doPay: false})
+      this.setState({error: error, doPay: false, isFetching: false})
       console.log("error", error)
     })
-
-    console.log("busCode", busCode)
   }
 
   render(){
-    const {price, error} = this.state
+    const {price, error, doPay} = this.state
     const {isAuth, isLoading} = this.props
 
     if(!isLoading && !isAuth) {
       return <Redirect to="/login" />
-    }
-
-    if(error) {
-      return (
-        <main style={{margin: "auto"}}>
-          {alert(error)}
-
-          return <Redirect to="/dashboard" />
-        </main>
-      ) 
     }
 
     if(price !== 0) {
@@ -107,12 +94,12 @@ class QrScan extends Component {
 
     return(
       <div>
-        <QrReader
+        {<QrReader
           delay={this.state.delay}
           onError={(err) => this._handleError(err)}
           onScan={(data) => this._handleScan(data)}
           style={{ width: '100%' }}
-          />
+          />}
         <p>{this.state.result}</p>
       </div>
     )
@@ -129,4 +116,4 @@ const mapDispatchToProps = dispatch => ({
   authCheckState: () => dispatch(authCheckState)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(QrScan)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(QrScan))
