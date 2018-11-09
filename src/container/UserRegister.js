@@ -8,7 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, TextField, Typography, createStyles } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
 
-import { authCheckState } from "../auth/action";
+import { authCheckState } from "../store/auth/action";
 
 const styles = createStyles({
   root: {
@@ -92,7 +92,7 @@ class UserRegister extends Component {
   render() {
     const { classes, isLoading, isAuth } = this.props
 
-    if(!isLoading && !isAuth) {
+    if(!isLoading && isAuth) {
       return <Redirect to="/" />
     }
 
