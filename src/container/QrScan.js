@@ -36,15 +36,17 @@ class QrScan extends Component {
   
   _pay = () => {
     this.setState({isFetching: true})
+    const { data } = this.state
+    const { userID, token } = this.props
 
     fetch(`/api/user/pay`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "token": this.props.token,
+        "token": token,
       },
       body: JSON.stringify({
-        "user_id": 1,
+        "user_id": userID,
         "bus_id": Number.parseInt(this.state.data, 10),
       })
     })
@@ -109,7 +111,8 @@ class QrScan extends Component {
 const mapStateToProps = state => ({
   isAuth: state.isAuth,
   isLoading: state.isLoading,
-  token: state.token
+  token: state.token,
+  userID: state.userID
 })
 
 const mapDispatchToProps = dispatch => ({
