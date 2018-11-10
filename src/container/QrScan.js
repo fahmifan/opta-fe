@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography'
 const styles = {
   card: {
     minWidth: 275,
-    padding: 8
+    margin: 8
   },
   bullet: {
     display: 'inline-block',
