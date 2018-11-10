@@ -52,6 +52,7 @@ class QrScan extends Component {
     if(data && data !== null) {
       this.setState({doPay: true, data: data})
       this._pay()
+        .then(this._getBalance())
     }
   }
   
@@ -59,61 +60,50 @@ class QrScan extends Component {
     console.error(err)
   }
   
-  _pay = () => {
+  _pay = async () => {
     this.setState({isFetching: true})
     const { data } = this.state
     const { userID, token } = this.props
 
-    fetch(`/api/user/pay`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "token": token,
-      },
-      body: JSON.stringify({
-        "user_id": userID,
-        "bus_id": Number.parseInt(data, 10),
+    try {
+      const req = await fetch(`/api/user/pay`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "token": token,
+        },
+        body: JSON.stringify({
+          "user_id": userID,
+          "bus_id": Number.parseInt(data, 10),
+        })
       })
-    })
-    .then(req => {
-      if(!req.ok) throw new Error(req.error)
-      return req.json()
-    })
-    .then(res => {
-      // if the payment is not success
-      if(!res.status) {
-        // set error
-        this.setState({
+
+      const res = await req.json()
+      
+      !res.status 
+      // set error
+      ? this.setState({
           price: res.price, 
           doPay: false, 
           error: res.error, 
           isFetching: false
         })
-        
-        // show error message to user
-        alert(res.error)
-        this.props.history.push("/")
-        
-        return
-      }
-
-      // after paid don't request again
-      this.setState({
-        price: res.price,
-        doPay: false, 
-        error: null, 
-        isFetching: false
-      })        
-
-    })
-    .catch(error => {
-      this.setState({error: error, doPay: false, isFetching: false})
-      console.log("error", error)
-    })
+      // don't request again
+      : this.setState({
+          price: res.price,
+          doPay: false, 
+          error: null, 
+          isFetching: false
+        }) 
+    } catch(error) {
+      // show error message to user
+      alert(error)
+      this.props.history.push("/")
+    }
   }
 
   render(){
-    const { price, error, doPay } = this.state
+    const { price } = this.state
     const { isAuth, isLoading, classes } = this.props
 
     // check auth
@@ -133,7 +123,7 @@ class QrScan extends Component {
         <Card className={classes.card}>
           <CardContent>
             <Typography variant="h5" component="h2">
-              { formatter.format(price|| 7500) }
+              Bayar: { formatter.format(price|| 7500) }
             </Typography>
           </CardContent>
           <CardActions>
