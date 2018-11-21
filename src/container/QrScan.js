@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import QrReader from 'react-qr-reader'
  
 import { connect } from "react-redux"
-import { Redirect, withRouter } from "react-router-dom"
+import { Redirect, withRouter, Link } from "react-router-dom"
 
 import { authCheckState } from "../store/auth/action"
 
@@ -56,6 +56,10 @@ class QrScan extends Component {
     }
   }
   
+  _getBalance = () => {
+    
+  }
+
   _handleError = (err) => {
     console.error(err)
   }
@@ -80,7 +84,9 @@ class QrScan extends Component {
 
       const res = await req.json()
       
-      !res.status 
+      console.log("payment status", res.status)
+      
+      !res.status
       // set error
       ? this.setState({
           price: res.price, 
@@ -103,7 +109,7 @@ class QrScan extends Component {
   }
 
   render(){
-    const { price } = this.state
+    const { price, error } = this.state
     const { isAuth, isLoading, classes } = this.props
 
     // check auth
@@ -112,7 +118,7 @@ class QrScan extends Component {
     }
 
     // show price
-    if(price !== 0) {
+    if(price !== 0 && error == null) {
       const formatter = new Intl.NumberFormat('id-ID', {
         style: 'currency',
         currency: 'IDR',
@@ -127,7 +133,32 @@ class QrScan extends Component {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button size="small"> Back </Button>
+            <Link to="/dashboard"><Button size="small"> Back </Button></Link>
+          </CardActions>
+        </Card>
+      )
+    }
+    else if(price !== null && price !== undefined && price !== 0 && error !== null) {
+      const formatter = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 2
+      })
+  
+      return (
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography variant="h5" component="h2">
+              Saldo tidak cukup untuk melakukan transaksi <br />
+              <br />
+              Silahkan melakukan top up saldo terlebih dahulu <br />
+              <br />
+              <small>Bayar: { formatter.format(price) }</small>
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Link to="/topup"><Button size="small"> Top Up </Button></Link>
+            <Link to="/dashboard"><Button size="small"> Kembali </Button></Link>
           </CardActions>
         </Card>
       )
