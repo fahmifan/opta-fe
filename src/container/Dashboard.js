@@ -30,6 +30,7 @@ const styles = createStyles({
 const scanLink = props => <Link to="/scan" {...props} />
 const topupLink = props => <Link to="/topup" {...props} />
 const busRouteLink = props => <Link to="bus_routes" {...props} />
+const userBalanceLink = props => <Link to="/balance" {...props} />
 
 const Dashboard = ({classes, authCheckState, isAuth, isLoading}) => {
   authCheckState()
@@ -56,6 +57,12 @@ const Dashboard = ({classes, authCheckState, isAuth, isLoading}) => {
       <Button component={busRouteLink} variant="contained" color="primary" fullWidth={true}>
         Rute Bus
       </Button>
+
+      <br/> <br/>
+      <Button component={userBalanceLink} variant="contained" color="primary" fullWidth={true}>
+        Balance
+      </Button>
+
     </main>
   )
 }

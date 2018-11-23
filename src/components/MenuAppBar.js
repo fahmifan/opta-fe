@@ -56,7 +56,7 @@ class MenuAppBar extends React.Component {
             <Typography variant="h6" color="inherit" className={classes.grow}>
               {this.props.appName}
             </Typography>
-            {auth && (
+            {/* {auth && (
               <div>
                 <IconButton
                   aria-owns={open ? 'menu-appbar' : undefined}
@@ -84,7 +84,7 @@ class MenuAppBar extends React.Component {
                   <MenuItem onClick={this.handleClose}>My account</MenuItem>
                 </Menu>
               </div>
-            )}
+            )} */}
           </Toolbar>
         </AppBar>
       </div>

@@ -18,6 +18,7 @@ import {
   UserRegister,
   TopUp,
   BusRoutes,
+  UserBalance,
 } from "./container" 
 
 class App extends Component {
@@ -53,6 +54,7 @@ class App extends Component {
           <Route path="/bus_routes" component={BusRoutes} />
           <Route path="/login" exact component={UserLogin} />
           <Route path="/register" exatc component={UserRegister} />
+          <Route path="/balance" exact component={UserBalance} />
           <Route path="/home" exact component={Home} />
           <Route path="/" exact component={Home} />
         </Switch>

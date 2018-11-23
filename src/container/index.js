@@ -5,6 +5,7 @@ import QrScan from "./QrScan"
 import UserRegister from "./UserRegister"
 import TopUp from "./TopUp"
 import BusRoutes from "./BusRoutes"
+import UserBalance from "./UserBalance"
 
 export { 
     Home, 
@@ -14,4 +15,5 @@ export {
     UserRegister,
     TopUp,
     BusRoutes,
+    UserBalance,
 };
