@@ -81,7 +81,7 @@ class UserBlance extends Component {
       <Card className={classes.card}>
           <CardContent>
             <Typography variant="h5" component="h2">
-              Bayar: { formatter.format(this.state.balance|| 7500) }
+              Bayar: { formatter.format(this.state.balance|| 0) }
             </Typography>
           </CardContent>
           <CardActions>
