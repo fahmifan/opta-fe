@@ -30,7 +30,6 @@ class BussCollapse extends Component {
 
     return (
       <React.Fragment>
-
         <ListItem onClick={() => this._listItemHandler(id)} button>
           <ListItemText primary={`${start_loc} - ${end_loc}`} />
           {open ? <ExpandLess /> : <ExpandMore />}

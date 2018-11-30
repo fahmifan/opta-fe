@@ -57,17 +57,17 @@ class BusRoutes extends Component {
         "token": token,
       }
     })
-    .then(req => req.json())
-    .then(res => {
-      this.setState({routes: [...res]})
-    
-      this.setState({isLoad: false})
-    })
-    .catch(err => {
-      console.log("err", err)
+      .then(req => req.json())
+      .then(res => {
+        this.setState({routes: [...res]})
+      
+        this.setState({isLoad: false})
+      })
+      .catch(err => {
+        console.log("err", err)
 
-      this.setState({isLoad: false})
-    })
+        this.setState({isLoad: false})
+      })
   } 
 
   render() {

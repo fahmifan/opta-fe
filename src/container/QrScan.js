@@ -36,6 +36,7 @@ class QrScan extends Component {
       delay: 200,
       result: null,
       doPay: false,
+      paySuccess: false,
       price: 0,
       error: null,
       isFetching: false,
@@ -50,16 +51,27 @@ class QrScan extends Component {
     console.log("data", data)
 
     if(data && data !== null) {
-      this.setState({doPay: true, data: data})
-      this._pay()
-        .then(this._getBalance())
+      this.setState({data: data})
+      this._getBusPrice(data)
     }
   }
-  
-  _getBalance = () => {
-    
-  }
 
+  async _getBusPrice(bus_id) {
+    fetch(`/api/bus/${bus_id}/price`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "token": this.props.token,
+      }
+    })
+      .then(req => req.json())
+      .then(res => {
+        console.log(res);
+        this.setState({price: res, doPay: true})
+      })
+      .catch(error => console.log("Error", error))
+  }
+  
   _handleError = (err) => {
     console.error(err)
   }
@@ -69,47 +81,36 @@ class QrScan extends Component {
     const { data } = this.state
     const { userID, token } = this.props
 
-    try {
-      const req = await fetch(`/api/user/pay`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "token": token,
-        },
-        body: JSON.stringify({
-          "user_id": userID,
-          "bus_id": Number.parseInt(data, 10),
-        })
+    fetch(`/api/user/pay`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "token": token,
+      },
+      body: JSON.stringify({
+        "user_id": userID,
+        "bus_id": Number.parseInt(data, 10),
       })
-
-      const res = await req.json()
-      
-      console.log("payment status", res.status)
-      
-      !res.status
-      // set error
-      ? this.setState({
-          price: res.price, 
-          doPay: false, 
-          error: res.error, 
-          isFetching: false
-        })
-      // don't request again
-      : this.setState({
+    })
+      .then(req => req.json())
+      .then(res => {
+        this.setState({
           price: res.price,
           doPay: false, 
-          error: null, 
-          isFetching: false
-        }) 
-    } catch(error) {
-      // show error message to user
-      alert(error)
-      this.props.history.push("/")
-    }
+          error: res.error && null, 
+          isFetching: false,
+          paySuccess: true,
+        })  
+      })
+      .catch(error => {
+        // show error message to user
+        alert(error)
+        this.props.history.push("/")
+      })
   }
 
   render(){
-    const { price, error } = this.state
+    const { price, error, doPay, paySuccess } = this.state
     const { isAuth, isLoading, classes } = this.props
 
     // check auth
@@ -117,8 +118,8 @@ class QrScan extends Component {
       return <Redirect to="/login" />
     }
 
-    // show price
-    if(price !== 0 && error == null) {
+    // show pay modals
+    if(doPay) {
       const formatter = new Intl.NumberFormat('id-ID', {
         style: 'currency',
         currency: 'IDR',
@@ -129,16 +130,18 @@ class QrScan extends Component {
         <Card className={classes.card}>
           <CardContent>
             <Typography variant="h5" component="h2">
-              Bayar: { formatter.format(price|| 7500) }
+              Bayar: { formatter.format(price|| 0) }
             </Typography>
           </CardContent>
           <CardActions>
-            <Link to="/dashboard"><Button size="small"> Back </Button></Link>
+            <Button onClick={this._pay} size="small"> Bayar </Button>
           </CardActions>
         </Card>
       )
     }
-    else if(price !== null && price !== undefined && price !== 0 && error !== null) {
+    
+    // show balance not enough
+    else if(!price && price !== 0 && error !== null) {
       const formatter = new Intl.NumberFormat('id-ID', {
         style: 'currency',
         currency: 'IDR',
@@ -164,6 +167,20 @@ class QrScan extends Component {
       )
     }
 
+    else if(paySuccess) {
+      return (
+        <Card className={classes.card}>
+          <CardContent>
+            <Typography variant="h5" component="h2">
+              Pembayaran berhasil
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Link to="/dashboard"><Button size="small"> Kembali </Button></Link>
+          </CardActions>
+        </Card>
+      )
+    }
     return(
       <div>
         {<QrReader
