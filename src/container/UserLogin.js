@@ -65,7 +65,7 @@ class UserLogin extends Component {
 
     console.log("error", error)
 
-    history.push('/dashboard');
+    history.push('/');
   }
 
   render() {

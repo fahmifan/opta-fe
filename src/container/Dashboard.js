@@ -9,11 +9,15 @@ import { withStyles } from '@material-ui/core/styles';
 import { Typography, createStyles } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
 
+import {Theme, btn} from "../utils/colors"
+
 const styles = createStyles({
   root: {
     justify: "center",
     paddingLeft: "1rem",
     paddingRight: "1rem",
+    backgroundColor: Theme.backgroundColor,
+    paddingTop: "1rem"
   },
   container: {
     display: 'flex',
@@ -41,25 +45,25 @@ const Dashboard = ({classes, authCheckState, isAuth, isLoading}) => {
 
   return (
     <main className={classes.root}>
-      <Typography variant="h4">Dashboard</Typography>
+      <Typography style={{color: Theme.logo}} variant="h4">Dashboard</Typography>
 
       <br/> <br/>
-      <Button component={scanLink} variant="contained" color="primary" fullWidth={true}>
+      <Button style={btn} component={scanLink} variant="contained" color="primary" fullWidth={true}>
         Scan!
       </Button> 
       
       <br/> <br/>
-      <Button component={topupLink} variant="contained" color="primary" fullWidth={true}>
+      <Button style={btn} component={topupLink} variant="contained" color="primary" fullWidth={true}>
         Top Up!
       </Button>
 
       <br/> <br/>
-      <Button component={busRouteLink} variant="contained" color="primary" fullWidth={true}>
+      <Button style={btn} component={busRouteLink} variant="contained" color="primary" fullWidth={true}>
         Rute Bus
       </Button>
 
       <br/> <br/>
-      <Button component={userBalanceLink} variant="contained" color="primary" fullWidth={true}>
+      <Button style={btn} component={userBalanceLink} variant="contained" color="primary" fullWidth={true}>
         Balance
       </Button>
 

@@ -3,6 +3,7 @@ export const Theme = {
     backgroundColor: "#f7ecdb",
     logo: "#EB3159",
     textPrimary: "#073642",
+    white: "#fff"
 }
 
 const theme = createMuiTheme({

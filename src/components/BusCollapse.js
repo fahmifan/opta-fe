@@ -13,6 +13,8 @@ import {
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 
+import { Theme } from "../utils/colors"
+
 class BussCollapse extends Component {
   state = {
     open: false
@@ -29,9 +31,9 @@ class BussCollapse extends Component {
     const {open} = this.state
 
     return (
-      <React.Fragment>
-        <ListItem onClick={() => this._listItemHandler(id)} button>
-          <ListItemText primary={`${start_loc} - ${end_loc}`} />
+      <>
+        <ListItem style={{backgroundColor: Theme.white}} onClick={() => this._listItemHandler(id)} button>
+          <ListItemText style={{color: Theme.logo, backgroundColor: Theme.white}} primary={`${start_loc} - ${end_loc}`} />
           {open ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
   
@@ -43,13 +45,13 @@ class BussCollapse extends Component {
             </Collapse>
           )}
         />
-      </React.Fragment>
+      </>
     )
   }
 }
 
 const BusRoutesDetail = ({detail, open}) => (
-  <List component="div" disablePadding>
+  <List component="div" style={{backgroundColor: Theme.white}} disablePadding>
     {
       detail && detail.map((d, i) => (
         <ListItem key={d.id}>

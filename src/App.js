@@ -20,7 +20,6 @@ import {
   BusRoutes,
   UserBalance,
 } from "./container" 
-
 class App extends Component {
   componentDidMount() {
     this.props.authCheckState()
@@ -36,7 +35,7 @@ class App extends Component {
       <Route path="/login" exact component={UserLogin} />
       <Route path="/register" exatc component={UserRegister} />
       <Route path="/home" exact component={UserLogin} />
-      <Route path="/" exact component={UserLogin} />
+      <Route path="/" component={UserLogin} />
       <Redirect to="/" />
       </>
     )
@@ -47,7 +46,7 @@ class App extends Component {
         <CssBaseline />
         <MenuAppBar appName="OPTA" />
         <Switch>
-          <Route path="/home" component={Home} />
+          <Route path="/home" component={UserLogin} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/scan" component={QrScan} />
           <Route path="/topup" component={TopUp} />
@@ -56,7 +55,7 @@ class App extends Component {
           <Route path="/register" exatc component={UserRegister} />
           <Route path="/balance" exact component={UserBalance} />
           <Route path="/home" exact component={Home} />
-          <Route path="/" exact component={Home} />
+          <Route path="/" component={Home} />
         </Switch>
         </>
       )

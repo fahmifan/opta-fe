@@ -16,11 +16,14 @@ import {
 } from "@material-ui/core"
 
 import {BusCollapse} from "../components"
+import Theme from "../utils/colors"
 
 const styles = createStyles({
   root: {
     paddingLeft: "1rem",
     paddingRight: "1rem",
+    backgroundColor: Theme.backgroundColor,
+    height: "100vh",
   },
   progress: {
     marginTop: "2rem",
