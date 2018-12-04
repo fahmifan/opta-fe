@@ -8,13 +8,14 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, TextField, Typography, createStyles } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
 
-import { btn } from "../utils/colors"
+import { btn, Theme } from "../utils/colors"
 
 const styles = createStyles({
   root: {
     justify: "center",
     paddingLeft: "1rem",
     paddingRight: "1rem",
+    paddingTop: "1rem",
   },
   container: {
     display: 'flex',
@@ -100,6 +101,8 @@ class TopUp extends Component {
     const { classes } = this.props
     return(
       <main className={classes.root}>
+        <Typography style={{color: Theme.logo}} variant="h4">Top Up</Typography>
+
         <Grid container 
           spacing={0}
           justify="center"
