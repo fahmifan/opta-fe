@@ -8,6 +8,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, TextField, Typography, createStyles } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
 
+import { btn } from "../utils/colors"
+
 const styles = createStyles({
   root: {
     justify: "center",
@@ -120,7 +122,8 @@ class TopUp extends Component {
               Rp
               </TextField>
 
-              <Button onClick={() => this._submitTopUpHandler()}
+              <Button style={btn} 
+                onClick={() => this._submitTopUpHandler()}
                 variant="contained" color="primary" fullWidth>
                 TopUp!
               </Button>
