@@ -17,7 +17,8 @@ const styles = createStyles({
     paddingLeft: "1rem",
     paddingRight: "1rem",
     backgroundColor: Theme.backgroundColor,
-    paddingTop: "1rem"
+    paddingTop: "1rem",
+    height: "100vh",
   },
   container: {
     display: 'flex',

@@ -8,7 +8,29 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, TextField, Typography, createStyles } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
 
+import MaskedInput from "react-text-mask"
+import createNumberMask from 'text-mask-addons/dist/createNumberMask'
+
 import { btn, Theme } from "../utils/colors"
+
+const numberMask = createNumberMask({
+  prefix: 'Rp',
+  suffix: '',
+  thousandsSeparatorSymbol: '.',
+  decimalSymbol: ',',
+  allowDecimal: true,
+  decimalLimit: 2,
+})
+
+const TextMasked = (props) => {
+  const {inputRef, ...other} = props  
+  return <MaskedInput
+    {...other}
+    ref={inputRef}
+    mask={numberMask}
+    showMask
+  />
+}
 
 const styles = createStyles({
   root: {
@@ -28,23 +50,21 @@ const styles = createStyles({
     width: 200,
   },
 });
-  
+
 class TopUp extends Component {
   state = {
     nominal: 0,
     error: null,
     isSuccess: false,
+    placeholder: "Rp 999"
   }
 
-  _inputHandler = (e, key) => {
-    const value = parseInt(e.target.value, 10)
-
-    this.setState({[key]: value})
-    console.log("key: " + key, "val: " + value)
+  _inputHandler = key => event => {
+    this.setState({[key]: event.target.value})
   }
 
   _submitTopUpHandler = () => {
-    const { nominal } = this.state
+    const nominal = parseInt(this.state.nominal.match(/\d/g).join(""), 10)
     const { token, userID } = this.props
 
     console.log("nominal", nominal)
@@ -109,20 +129,20 @@ class TopUp extends Component {
           direction="column">
           <Grid item xs={12}>
             <form className={classes.container} noValidate autoComplete="off">
-              <TextField onChange={(e) => this._inputHandler(e, "nominal")}
+              <TextField 
                 id="outlined-number"
                 label="Nominal"
                 className={classes.textField}
-                type="number"
+                type="text"
                 name="nominal"
                 margin="normal"
-                InputLabelProps={{
-                  shrink: true,
+                InputProps={{
+                  inputComponent: TextMasked,
+                  value: this.state.nominal,
+                  onChange: this._inputHandler("nominal"),
                 }}
                 variant="outlined"
-                placeholder="999"
                 fullWidth>
-              Rp
               </TextField>
 
               <Button style={btn} 
