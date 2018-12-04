@@ -24,6 +24,7 @@ const styles = createStyles({
     paddingRight: "1rem",
     backgroundColor: Theme.backgroundColor,
     height: "100vh",
+    paddingTop: "1rem"
   },
   progress: {
     marginTop: "2rem",
@@ -83,7 +84,7 @@ class BusRoutes extends Component {
 
     return(
       <main className={classes.root}>
-        <Typography variant="h5">Rute Bus</Typography>
+        <Typography style={{color: Theme.logo}} variant="h5">Rute Bus</Typography>
       
         {isLoad && <CircularProgress className={classes.progress} />}
 
