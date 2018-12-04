@@ -9,11 +9,14 @@ import { Grid, TextField, Typography, createStyles } from "@material-ui/core"
 import Button from '@material-ui/core/Button'
 
 import { authCheckState } from "../store/auth/action";
+import { Theme, btn } from "../utils/colors"
 
 const styles = createStyles({
   root: {
     justify: "center",
-    padding: "1rem"
+    padding: "1rem",
+    backgroundColor: Theme.backgroundColor,
+    height: "100vh"
   },
   container: {
     display: 'flex',
@@ -98,6 +101,10 @@ class UserRegister extends Component {
 
     return(
       <main className={classes.root}>
+        <Typography style={{color: Theme.logo, fontWeight: "bold"}} variant="h4" gutterBottom>
+          Register
+        </Typography>
+
         <Grid container 
           spacing={0}
           justify="center"
@@ -151,7 +158,8 @@ class UserRegister extends Component {
                 fullWidth
                 />
 
-              <Button onClick={(e) => this._submitregisterHandler(e)}
+              <Button style={btn} 
+                onClick={(e) => this._submitregisterHandler(e)}
                 variant="contained" color="primary" fullWidth>
                 register
               </Button>
