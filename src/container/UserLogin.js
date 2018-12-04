@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 
-import { withRouter, Redirect } from "react-router-dom"
+import { withRouter, Redirect, Link } from "react-router-dom"
 
 import { connect } from "react-redux"
 import actions, { authCheckState } from "../store/auth/action"
@@ -17,11 +17,19 @@ import {
 
 import Button from '@material-ui/core/Button'
 
+import { Theme, btn } from "../utils/colors"
+
 const styles = createStyles({
   root: {
-    justify: "center",
-    paddingLeft: "1rem",
-    paddingRight: "1rem",
+    flexGrow: 1,
+    textAlign: "center",
+    paddingLeft: "0.5rem",
+    paddingRight: "0.5rem",
+    verticalAlign: "middle",
+    backgroundColor: Theme.backgroundColor,
+    color: Theme.textPrimary,
+    height: "100vh",
+    paddingTop: "2rem"
   },
   progress: {
     marginTop: "2rem",
@@ -73,6 +81,10 @@ class UserLogin extends Component {
 
     return(
       <main className={classes.root}>
+        <Typography style={{color: Theme.logo, fontWeight: "bold"}} variant="h4" gutterBottom>
+          OPTA
+        </Typography>
+
         <Grid container spacing={0} justify="center" direction="column">
           <Grid item xs={12}>
             <form className={classes.container} noValidate autoComplete="off">
@@ -100,16 +112,20 @@ class UserLogin extends Component {
                 fullWidth
                 />
 
-              <Button onClick={() => this._login()}
+              <Button style={btn} onClick={() => this._login()}
                 variant="contained" color="primary" fullWidth>
                 Login
               </Button>
             </form>
           </Grid>
         </Grid>
-
-        <Typography>email: opta@email.com; password: opta</Typography>
-
+  
+        <Grid container spacing={0}>
+          <Grid xs={12}>
+            <Typography>belum punya akun? <Link to="/register" style={{color: Theme.logo}}>klik di sini</Link> </Typography>
+          </Grid>
+        </Grid>
+  
         <Snackbar 
           anchorOrigin={{
             vertical: 'bottom',

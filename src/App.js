@@ -32,11 +32,11 @@ class App extends Component {
     let routes = (
       <>
       <CssBaseline />
-      <MenuAppBar appName="OPTA" /> <br />
+      <MenuAppBar appName="OPTA" />
       <Route path="/login" exact component={UserLogin} />
       <Route path="/register" exatc component={UserRegister} />
-      <Route path="/home" exact component={Home} />
-      <Route path="/" exact component={Home} />
+      <Route path="/home" exact component={UserLogin} />
+      <Route path="/" exact component={UserLogin} />
       <Redirect to="/" />
       </>
     )
@@ -45,7 +45,7 @@ class App extends Component {
       routes =  (
         <>
         <CssBaseline />
-        <MenuAppBar appName="OPTA" /> <br />
+        <MenuAppBar appName="OPTA" />
         <Switch>
           <Route path="/home" component={Home} />
           <Route path="/dashboard" component={Dashboard} />
