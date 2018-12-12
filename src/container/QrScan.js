@@ -31,6 +31,56 @@ const styles = {
   },
 };
 
+const priceFormatter = new Intl.NumberFormat('id-ID', {
+  style: 'currency',
+  currency: 'IDR',
+  minimumFractionDigits: 2
+})
+
+export const PaymentInfo = ({classes, price, handlePay}) => (
+  <Card className={classes.card}>
+    <CardContent>
+      <Typography variant="h5" component="h2">
+        Bayar: { priceFormatter.format(price|| 0) }
+      </Typography>
+    </CardContent>
+    <CardActions>
+      <Button onClick={handlePay} size="small"> Bayar </Button>
+    </CardActions>
+  </Card>
+)
+
+export const BalanceNotEnough = ({classes, price}) => (
+  <Card className={classes.card}>
+    <CardContent>
+      <Typography variant="h5" component="h2">
+        Saldo tidak cukup untuk melakukan transaksi <br />
+        <br />
+        Silahkan melakukan top up saldo terlebih dahulu <br />
+        <br />
+        <small>Bayar: { priceFormatter.format(price) }</small>
+      </Typography>
+    </CardContent>
+    <CardActions>
+      <Link to="/topup"><Button size="small"> Top Up </Button></Link>
+      <Link to="/dashboard"><Button size="small"> Kembali </Button></Link>
+    </CardActions>
+  </Card>
+)
+
+export const PaymentSuccess = ({classes}) => (
+  <Card className={classes.card}>
+    <CardContent>
+      <Typography variant="h5" component="h2">
+        Pembayaran berhasil
+      </Typography>
+    </CardContent>
+    <CardActions>
+      <Link to="/dashboard"><Button size="small"> Kembali </Button></Link>
+    </CardActions>
+  </Card>
+)
+
 class QrScan extends Component {
   state = {
       delay: 200,
@@ -50,13 +100,14 @@ class QrScan extends Component {
   _handleScan = (data) => {
     console.log("data", data)
 
+    // request payment if scan is success
     if(data && data !== null) {
       this.setState({data: data})
       this._getBusPrice(data)
     }
   }
 
-  async _getBusPrice(bus_id) {
+  _getBusPrice(bus_id) {
     fetch(`/api/bus/${bus_id}/price`, {
       method: "GET",
       headers: {
@@ -76,7 +127,7 @@ class QrScan extends Component {
     console.error(err)
   }
   
-  _pay = async () => {
+  _pay = () => {
     this.setState({isFetching: true})
     const { data } = this.state
     const { userID, token } = this.props
@@ -92,8 +143,15 @@ class QrScan extends Component {
         "bus_id": Number.parseInt(data, 10),
       })
     })
-      .then(req => req.json())
+      .then(req => {
+        console.log("req", req)
+        if(!req.ok || req.error) throw new Error(req.error)
+
+        return req.json()
+      })
       .then(res => {
+        console.log("price", res.price)
+
         this.setState({
           price: res.price,
           doPay: false, 
@@ -105,6 +163,7 @@ class QrScan extends Component {
       .catch(error => {
         // show error message to user
         alert(error)
+
         this.props.history.push("/")
       })
   }
@@ -120,69 +179,22 @@ class QrScan extends Component {
 
     // show pay modals
     if(doPay) {
-      const formatter = new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 2
-      })
-  
       return (
-        <Card className={classes.card}>
-          <CardContent>
-            <Typography variant="h5" component="h2">
-              Bayar: { formatter.format(price|| 0) }
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button onClick={this._pay} size="small"> Bayar </Button>
-          </CardActions>
-        </Card>
+        <PaymentInfo classes={classes} price={price} handlePay={this._pay} />
       )
     }
     
     // show balance not enough
-    else if(!price && price !== 0 && error !== null) {
-      const formatter = new Intl.NumberFormat('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 2
-      })
-  
-      return (
-        <Card className={classes.card}>
-          <CardContent>
-            <Typography variant="h5" component="h2">
-              Saldo tidak cukup untuk melakukan transaksi <br />
-              <br />
-              Silahkan melakukan top up saldo terlebih dahulu <br />
-              <br />
-              <small>Bayar: { formatter.format(price) }</small>
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Link to="/topup"><Button size="small"> Top Up </Button></Link>
-            <Link to="/dashboard"><Button size="small"> Kembali </Button></Link>
-          </CardActions>
-        </Card>
-      )
+    if(!price && price !== 0 && error !== null) {
+      return <BalanceNotEnough classes={classes} price={price} />
     }
-
-    else if(paySuccess) {
-      return (
-        <Card className={classes.card}>
-          <CardContent>
-            <Typography variant="h5" component="h2">
-              Pembayaran berhasil
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Link to="/dashboard"><Button size="small"> Kembali </Button></Link>
-          </CardActions>
-        </Card>
-      )
+    
+    if(paySuccess) {
+      return <PaymentSuccess classes={classes} />
     }
+    
     return(
-      <div>
+      <>
         {<QrReader
           delay={this.state.delay}
           onError={(err) => this._handleError(err)}
@@ -190,7 +202,7 @@ class QrScan extends Component {
           style={{ width: '100%' }}
           />}
         <p>{this.state.result}</p>
-      </div>
+      </>
     )
   }
 }
