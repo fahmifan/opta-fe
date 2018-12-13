@@ -37,50 +37,31 @@ const topupLink = props => <Link to="/topup" {...props} />
 const busRouteLink = props => <Link to="bus_routes" {...props} />
 const userBalanceLink = props => <Link to="/balance" {...props} />
 
-const Dashboard = ({classes, authCheckState, isAuth, isLoading}) => {
-  authCheckState()
-  
-  if(!isLoading && !isAuth) {
-    return <Redirect to="/" />
-  }
+const Dashboard = ({ classes }) => (
+  <main className={classes.root}>
+    <Typography style={{color: Theme.logo}} variant="h4">Dashboard</Typography>
 
-  return (
-    <main className={classes.root}>
-      <Typography style={{color: Theme.logo}} variant="h4">Dashboard</Typography>
+    <br/> <br/>
+    <Button style={btn} component={scanLink} variant="contained" color="primary" fullWidth={true}>
+      Scan!
+    </Button> 
+    
+    <br/> <br/>
+    <Button style={btn} component={topupLink} variant="contained" color="primary" fullWidth={true}>
+      Top Up!
+    </Button>
 
-      <br/> <br/>
-      <Button style={btn} component={scanLink} variant="contained" color="primary" fullWidth={true}>
-        Scan!
-      </Button> 
-      
-      <br/> <br/>
-      <Button style={btn} component={topupLink} variant="contained" color="primary" fullWidth={true}>
-        Top Up!
-      </Button>
+    <br/> <br/>
+    <Button style={btn} component={busRouteLink} variant="contained" color="primary" fullWidth={true}>
+      Rute Bus
+    </Button>
 
-      <br/> <br/>
-      <Button style={btn} component={busRouteLink} variant="contained" color="primary" fullWidth={true}>
-        Rute Bus
-      </Button>
+    <br/> <br/>
+    <Button style={btn} component={userBalanceLink} variant="contained" color="primary" fullWidth={true}>
+      Balance
+    </Button>
 
-      <br/> <br/>
-      <Button style={btn} component={userBalanceLink} variant="contained" color="primary" fullWidth={true}>
-        Balance
-      </Button>
+  </main>
+)
 
-    </main>
-  )
-}
-
-const mapStateToProps = state => {
-  return {
-    isAuth: state.isAuth,
-    isLoading: state.isLoading,
-  }
-}
-
-const mapDispatchToProps = dispatch => ({
-  authCheckState: () => dispatch(authCheckState())
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard))
+export default withStyles(styles)(Dashboard)

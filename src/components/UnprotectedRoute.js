@@ -4,10 +4,13 @@ import { connect } from "react-redux"
 
 import { authCheckState } from "../store/auth/action"
 
-const ProtectedRoute = ({ authCheckState,  isAuth, isLoading, ...props }) => 
-  !isLoading && !isAuth 
-  ? <Route {...props}/>
-  : <Redirect to="/home"/>;
+const UnprotectedRoute = ({ authCheckState,  isAuth, isLoading, ...props }) => {
+  authCheckState()
+
+  return !isAuth
+  ? <Route {...props}/> 
+  : <Redirect to="/dashboard"/>;
+}
 
 const mapStateToProps = state => ({
   isAuth: state.isAuth,
@@ -20,4 +23,4 @@ const mapDispatchToProps = dispatch => ({
   authCheckState: () => dispatch(authCheckState)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProtectedRoute)
+export default connect(mapStateToProps, mapDispatchToProps)(UnprotectedRoute)

@@ -44,10 +44,6 @@ class UserLogin extends Component {
     password: "",
   }
 
-  componentDidMount() {
-    this.props.authCheckState()
-  }
-
   _inputHandler = (e, type) => {
     this.setState({[type]: e.target.value})
   }
@@ -70,10 +66,6 @@ class UserLogin extends Component {
 
   render() {
     const { classes, isLoading, isAuth } = this.props
-
-    if(isAuth) {
-      return <Redirect to="/dashboard" />
-    }
 
     if(isLoading) {
       return <CircularProgress className={classes.progress} />

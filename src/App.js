@@ -28,13 +28,14 @@ class App extends Component {
 
   render() {
     return (
+      <>
+      <CssBaseline />
+      <MenuAppBar appName="OPTA" />
+      
       <Router>
-        <>
-        <CssBaseline />
-        <MenuAppBar appName="OPTA" />
         <Switch>
           <UnprotectedRoute path="/login" exact component={UserLogin} />
-          <UnprotectedRoute path="/register" exatc component={UserRegister} />
+          <UnprotectedRoute path="/register" exact component={UserRegister} />
           
           <ProtectedRoute path="/dashboard" component={Dashboard} />
           <ProtectedRoute path="/scan" component={QrScan} />
@@ -43,12 +44,12 @@ class App extends Component {
           <ProtectedRoute path="/login" exact component={UserLogin} />
           <ProtectedRoute path="/register" exatc component={UserRegister} />
           <ProtectedRoute path="/balance" exact component={UserBalance} />
-          <ProtectedRoute path="/home" exact component={Home} />
+          <UnprotectedRoute path="/home" exact component={Home} />
 
-          <ProtectedRoute path="/" component={Home} />
+          <UnprotectedRoute path="/" component={Home} />
         </Switch>
-        </>
       </Router>
+      </>
     )
   }
 }

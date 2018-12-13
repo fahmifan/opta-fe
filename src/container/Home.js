@@ -30,12 +30,6 @@ const registerLink = props => <Link to="/register" {...props} />
 
 // class Home extends Component {
 const Home =({classes, isAuth, isLoading, authCheckState}) => {
-  authCheckState()
-  
-  if(!isLoading && isAuth) {
-    return <Redirect to="/dashboard" />
-  }
-
   return(
     <main className={classes.root}>
       <Typography variant="h4" gutterBottom>
