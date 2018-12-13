@@ -1,15 +1,19 @@
 import React, { Component } from 'react'
 import QrReader from 'react-qr-reader'
- 
 import { connect } from "react-redux"
 import { withRouter, Link } from "react-router-dom"
+import {
+  Card, 
+  CardActions, 
+  CardContent, 
+  Button, 
+  Typography,
+  withStyles,
+}
 
-import { withStyles } from '@material-ui/core/styles'
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-import Button from '@material-ui/core/Button' 
-import Typography from '@material-ui/core/Typography' 
+from '@material-ui/core'
+
+import { IDR  } from "../utils"
 
 const styles = { 
   card: { 
@@ -29,17 +33,11 @@ const styles = {
   },
 };
 
-const priceFormatter = new Intl.NumberFormat('id-ID', {
-  style: 'currency',
-  currency: 'IDR',
-  minimumFractionDigits: 2
-})
-
 export const PaymentInfo = ({classes, price, handlePay}) => (
   <Card className={classes.card}>
     <CardContent>
       <Typography variant="h5" component="h2">
-        Bayar: { priceFormatter.format(price|| 0) }
+        Bayar: { IDR.format(price|| 0) }
       </Typography>
     </CardContent>
     <CardActions>
@@ -56,7 +54,7 @@ export const BalanceNotEnough = ({classes, price}) => (
         <br />
         Silahkan melakukan top up saldo terlebih dahulu <br />
         <br />
-        <small>Bayar: { priceFormatter.format(price) }</small>
+        <small>Bayar: { IDR.format(price) }</small>
       </Typography>
     </CardContent>
     <CardActions>
@@ -172,9 +170,7 @@ class QrScan extends Component {
 
     // show pay modals
     if(doPay) {
-      return (
-        <PaymentInfo classes={classes} price={price} handlePay={this._pay} />
-      )
+      return <PaymentInfo classes={classes} price={price} handlePay={this._pay} />
     }
     
     // show balance not enough
@@ -188,12 +184,12 @@ class QrScan extends Component {
     
     return(
       <>
-        {<QrReader
+        <QrReader
           delay={this.state.delay}
           onError={(err) => this._handleError(err)}
           onScan={(data) => this._handleScan(data)}
           style={{ width: '100%' }}
-          />}
+          />
         <p>{this.state.result}</p>
       </>
     )

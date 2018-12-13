@@ -1,10 +1,8 @@
 import React, { Component } from "react"
-
 import { withRouter, Link } from "react-router-dom"
-
 import { connect } from "react-redux"
-
 import { withStyles } from '@material-ui/core/styles';
+
 import {  
   Card,
   Typography, 
@@ -13,6 +11,9 @@ import {
   Button,
   createStyles 
 } from "@material-ui/core"
+
+
+import { IDR  } from "../utils"
 
 const styles = createStyles({
   root: {
@@ -70,25 +71,19 @@ class UserBlance extends Component {
 
   render() {
     const { classes } = this.props
-    
-    const formatter = new Intl.NumberFormat('id-ID', {
-      style: 'currency',
-      currency: 'IDR',
-      minimumFractionDigits: 2
-    })
 
-    return(<>
+    return(
       <Card className={classes.card}>
-          <CardContent>
-            <Typography variant="h5" component="h2">
-              Bayar: { formatter.format(this.state.balance|| 0) }
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Link to="/topup"><Button size="small"> TopUp </Button></Link>
-          </CardActions>
-        </Card>
-    </>)
+        <CardContent>
+          <Typography variant="h5" component="h2">
+            Saldo: { IDR.format(this.state.balance|| 0) }
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Link to="/topup"><Button size="small"> TopUp </Button></Link>
+        </CardActions>
+      </Card>
+    )
   }
 }
 
