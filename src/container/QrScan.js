@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import QrReader from 'react-qr-reader'
  
 import { connect } from "react-redux"
-import { Redirect, withRouter, Link } from "react-router-dom"
-
-import { authCheckState } from "../store/auth/action"
+import { withRouter, Link } from "react-router-dom"
 
 import { withStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
@@ -170,12 +168,7 @@ class QrScan extends Component {
 
   render(){
     const { price, error, doPay, paySuccess } = this.state
-    const { isAuth, isLoading, classes } = this.props
-
-    // check auth
-    if(!isLoading && !isAuth) {
-      return <Redirect to="/login" />
-    }
+    const { classes } = this.props
 
     // show pay modals
     if(doPay) {
@@ -208,14 +201,8 @@ class QrScan extends Component {
 }
 
 const mapStateToProps = state => ({
-  isAuth: state.isAuth,
-  isLoading: state.isLoading,
   token: state.token,
   userID: state.userID
 })
 
-const mapDispatchToProps = dispatch => ({
-  authCheckState: () => dispatch(authCheckState)
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(withStyles(styles)(QrScan)))
+export default connect(mapStateToProps)(withRouter(withStyles(styles)(QrScan)))
