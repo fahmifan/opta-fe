@@ -47,9 +47,6 @@ const Home =({classes, isAuth, isLoading, authCheckState}) => {
 
         <Grid item xs={12}>
           <Typography>belum punya akun? <Link to={registerLink} style={{color: Theme.logo}}>klik di sini</Link> </Typography>
-          {/* <Button component={registerLink} variant="contained" color="primary" fullWidth>
-            Register
-          </Button> */}
         </Grid>
 
       </Grid>
